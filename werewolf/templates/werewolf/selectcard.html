@@ -1,0 +1,26 @@
+{% extends "werewolf/base.html" %}
+
+{% block nav %}
+<li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+{% endblock %}
+
+{% block pageName %}
+WEREWOLF GAME
+{% endblock %}
+
+{% block content %}
+<script>
+    document.body.style.backgroundImage = "url('/static/werewolf/castle.png')";
+</script>
+
+<div id="choose_card">
+    {% block game-content %}
+    <form method="POST" action = "{% url 'check_card' %}">
+        {% csrf_token %}
+        <button> Check Your Role </button>
+    </form> 
+    {% endblock %} 
+</div>
+
+{% endblock %}

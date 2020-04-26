@@ -1,0 +1,213 @@
+{% extends "werewolf/base.html" %}
+
+{% block nav %}
+<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+<li class="nav-item active"><a class="nav-link" href="{% url 'lobby' %}">Game Lobby</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">{{user.username}}</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+{% endblock %}
+
+{% block pageName %}
+    <span style="font-family: Impact;" id = "lobby_page">GAME LOBBY</span>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#createRoomModal">Create Rooms</button>
+        </div>
+        <div class="col col-lg-2">
+            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#searchRoomModal">Search Rooms</button>
+        </div>
+        <div class="col col-lg-2">
+            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#myRoomModal">My Room</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create Room Modal -->
+<div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog" aria-labelledby="createRoomModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createRoomModalTitle">Room Settings</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{% url 'createRoom' %}">
+                <div class="modal-body">
+                    Difficulty &emsp;
+                    <select class="form-control-inline" name="difficulty">
+                        <option>Easy</option>
+                        <option>Normal</option>
+                        <option>Hard</option>
+                    </select><br><br>
+                    Number of Players &emsp;
+                    <select class="form-control-inline" name="playerNum">
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                        <option>16</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-outline-info">Create</button>
+                </div>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Search Room Modal -->
+<div class="modal fade" id="searchRoomModal" tabindex="-1" role="dialog" aria-labelledby="searchRoomModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchRoomModalTitle">Search by</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-num-tab" data-toggle="tab" href="#nav-num" role="tab" aria-controls="nav-home" aria-selected="true">Room ID</a>
+                        <a class="nav-item nav-link" id="nav-mode-tab" data-toggle="tab" href="#nav-mode" role="tab" aria-controls="nav-profile" aria-selected="false">Game Mode</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active tab-inside" id="nav-num" role="tabpanel" aria-labelledby="nav-num-tab">
+                        <form class="form-inline">
+                            <label>Room ID</label>&emsp;
+                            <input id="room-id" type="text" class="form-control">
+                        </form><br>
+                        <form class="form-inline">
+                            <label>Password</label>&emsp;
+                            <input id="room-pw" type="text" class="form-control">
+                        </form>
+                    </div>
+                    <div class="tab-pane fade tab-inside" id="nav-mode" role="tabpanel" aria-labelledby="nav-mode-tab">
+                        Difficulty &emsp;
+                        <select id="room-difficulty" class="form-control-inline">
+                            <option>All</option>
+                            <option>Easy</option>
+                            <option>Normal</option>
+                            <option>Hard</option>
+                        </select><br><br>
+                        Number of Players &emsp;
+                        <select id="room-players" class="form-control-inline">
+                            <option>All</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-outline-info" onclick="searchRoom()" data-dismiss="modal">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- My Room Modal -->
+<div class="modal fade" id="myRoomModal" tabindex="-1" role="dialog" aria-labelledby="myRoomModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myRoomModalTitle">My Room</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="myRoom-table">
+                    <tr>
+                        <th>Room ID:</td>
+                        <td id="roomID">{{myRoom.id}}</td>
+                    </tr>
+                    <tr>
+                        <th>Password:</td>
+                        <td id="password">{{myRoom.password}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-outline-warning" data-dismiss="modal" onclick="copy()">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+
+
+
+<div class="errors">
+{% for error in errors %}
+    <p class="errors">{{error}}</p>
+{% endfor %}
+</div>
+
+<div class="container">
+    <div class="row" id="rooms-all">
+        {% for room in rooms %}
+        <div id="room_{{room.id}}" class="all-rooms col-4">
+            <div class="card">
+                <div class="card-container">
+                    <img id="{{room.id}}" src="{{room.pictureURL}}" class="card-img-top card-image" onload="getPlayers(this.id)">
+                    <div class="card-body">
+                        <h5 class="card-title">{{room.difficulty}} &nbsp;| &nbsp; <span id="totalplayers_{{room.id}}">{{room.numOfPlayers}}</span> Players</h5>
+                        <p class="card-text"><span id="ready-num_{{room.id}}"></span> players ready. Waiting for <span id="missing_{{room.id}}" class="missing-player"><b>{{room.numOfPlayers}}</b></span> more players.</p>
+                    </div>
+                    <div class="overlay">
+                        <div class="overlay-text">Room members</div><br>
+                        <div id="members_{{room.id}}" class="members"></div>
+                        <form method="POST" action="{% url 'joinRoom' room.id %}">
+                            <button class="btn btn-outline-warning overlay-button" id="joinButton_{{room.id}}">Join</button>
+                            {% csrf_token %}
+                        </form>
+                        <form method="POST" action="{% url 'start' room.id %}">
+                                <button class="btn btn-outline-warning overlay-button" id = "startButton_{{room.id}}">Start</button>
+                                {% csrf_token %}
+                        </form>
+                        <form method="POST" action="{% url 'exitRoom' room.id %}">
+                            <button class="btn btn-outline-warning overlay-button" id="exitButton_{{room.id}}">Exit</button>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    window.onload = refreshLobby;
+    window.setInterval(refreshLobby, 5000);
+</script>
+{% endblock %}
+
+

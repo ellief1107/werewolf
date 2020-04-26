@@ -1,0 +1,38 @@
+{% extends "werewolf/base.html" %}
+
+{% block nav %}
+<li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+{% endblock %}
+                
+{% block content %}
+<div id="home-context">
+    <section id = 'intro'>
+        <div class = "jumbotron" >
+            <div class= 'container'>
+                <div class = "col-md-12">
+                    <h1>The Best WereWolf Game</h1>
+                    <p class="lead">Life is Boring. Let's Play Together!</p>
+                    <a class = 'btn' href = "{% url 'login' %}">Join the Game!</a>
+                    <a class = 'btn' href = "{% url 'rule' %}">Tutorial</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}
+
+{% block footer%}
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class='col-md-4 text-left'></div>
+                {% load static %}
+                <img src="{% static 'werewolf/logo.jpg' %}"> <p>© 2020 • Built in Pittsburgh, Pa</p>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

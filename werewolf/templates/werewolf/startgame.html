@@ -1,0 +1,25 @@
+{% extends "werewolf/selectcard.html" %}
+
+{% block game-content %}
+    <h1> Your Role is:</h1>
+    <br>
+<div>
+    {% load static%}
+    <img src="{% static 'werewolf/mywolf.jpg' %}" width="280" height="420">
+</div>
+    <br>
+     <form method="POST" action = "{% url 'start_game' %}">
+		{% csrf_token %}
+    <button> START GAME! </button>
+     </form>
+ {% endblock %}
+
+
+
+
+
+
+
+
+
+

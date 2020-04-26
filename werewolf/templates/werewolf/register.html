@@ -1,0 +1,23 @@
+{% extends "werewolf/base.html" %}
+
+{% block nav %}
+<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+<li class="nav-item active"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+{% endblock %}
+
+{% block pageName %}
+    Register
+{% endblock %}
+                
+{% block content %}
+<div align="center">
+    <form method="POST" action="{% url 'register' %}">
+        <table class="login_register_table">
+            {{form}}
+        </table>
+        {% csrf_token %}
+        <button id="id_register_button" class="btn btn-outline-dark">Register</button>
+    </form>
+</div>
+{% endblock %}

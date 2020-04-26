@@ -1,0 +1,127 @@
+{% extends "werewolf/selectcard.html" %}
+
+{% block nav %}
+<li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'login' %}"> Login </a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'register' %}"> Register </a></li>
+{% endblock %}
+
+
+
+{% block content %}
+<div id="home-context">
+<section id = 'intro'>
+    <div class = "jumbotron" >
+        <div class= 'container'>
+            <div class = "col-md-12">
+                <h1>HOW TO PLAY?</h1>
+                <p class="lead">Read the rule before starting game!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id = 'rule'>
+    <div class = 'container-fluid'>
+        <div class="row">
+            <div class='col-md-8 offset-md-2 text-center'>
+                <div class = 'row'>
+                    <div class="col-md-2">
+                        <h5> Setting Up</h5>
+                    </div>
+                    <div class = 'col-md-10 text-left' >
+                        <p class="lead"> In this game, you can create a room by choosing the number of players
+                            and the difficulty or join a room in the game lobby. There should be at least six players
+                            in a room.  There always have 1 Seer, 1 Doctor, and 2 werewolves and the rest of the players should be Villagers.
+                            When game starts, each player is aggsined a role by system. Each player should check their card, but must keep it a serect.
+                            You can learn more about what each can do  <span><a href="{% url 'character' %}">here</a></span>.
+                        </p>
+                    </div>
+                </div>
+                <HR style="FILTER: alpha(opacity=80,finishopacity=0,style=3)" width="100%" color=#212529 SIZE=3>
+                <div class = 'row'>
+                    <div class="col-md-2">
+                        <h5> Gameplay</h5>
+                    </div>
+                    <div class = 'col-md-10 text-left' >
+                        <p class="lead"> The game proceeds in alternating night and day rounds. Begin with nighttime.</p>
+                        <br>
+                        <h5>The Night</h5>
+                        <br>
+                        <p class="lead"> At night, the moderator (the system) tells all the players,
+                            "Close your eyes." Everyone can not send text in the chat board. When the moderator says,
+                            "Werewolves, open your eyes and pick someone to kill." The werewolves can discuss
+                            at the chat board which is only visible to werewolves.
+                            <br>
+                            <br>
+                            When the werewolves have agreed on a victim, and click the button below that victim. If the werewolves choose different victim,
+                            the moderator will ask them choose again. Then the moderator says, " Werewolves, close your eyes."
+                            <br>
+                            <br>
+                            Now, the moderator awakens the Doctor and says, "Doctor, would you like to heal?" The Doctor can choose to whether heal the victim or not.
+                            <br>
+                            <br>
+                            The moderator says "Seer, open your eyes. Seer, pick someone to ask about." The Seer will choose a player. (Again, it is only revisable to Seer.)
+                            The moderator will tell him  whether the picked one is wolf or not.
+                            <br>
+                            <br>
+                            The moderator says, "Everybody open your eyes; it's daytime."
+                            And let's the villager know who has been killed. That person is immediately dead and out of the game. They do not reveal their identity.
+                            <br>
+                            <br>
+                            <h5>The Day </h5>
+                            <br>
+                            <br>
+                            <p class="lead">
+                                For the first day, go around and have everyone introduce themselves through the chat board.(Example: Hey, I'm Matt. I'm the baker here in town, and I'm a villager.
+                                Daytime is very simple; all the living players gather in the village and decide who to kill.
+                                As soon as a majority of players vote for a particular player to kill, the moderator says "Ok, you're dead."
+                                <br>
+                                <br>
+                            <p class="lead">
+                            There are no restrictions on speech.
+                            Any living player can say anything they want -- truth, misdirection, nonsense, or a barefaced
+                            lie. Dead players may not speak at all. Similarly, as soon as a majority vote indicates that
+                            a player has been chosen to be killed, they are dead. If they want to protest their innocence
+                            or reveal some information (like the seer's visions), they must do it before the vote goes through.
+                            <br>
+                            <br>
+                            <p class="lead">
+                            Once a player is killed, night falls and the cycle repeats.
+                        </p>
+                    </div>
+                </div>
+                <HR style="FILTER: alpha(opacity=80,finishopacity=0,style=3)" width="100%" color=#212529 SIZE=3>
+                <div class = 'row'>
+                    <div class="col-md-2">
+                        <h5> Winning</h5>
+                    </div>
+                    <div class = 'col-md-10 text-left' >
+                        <p class="lead">
+                          The villagers win if they kill both werewolves.
+                            <br>
+
+                        <p class="lead">
+                        The werewolves win if they kill both villagers, doctor and seer.
+                        </p>
+                    </div>
+                </div>
+                <a class = 'btn' href = "{% url 'login' %}">Join the Game </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+</div>
+{%endblock%}
+    {% block footer%}
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class='col-md-4 text-left'></div>
+                {% load static%}
+                <img src="{% static 'werewolf/logo.jpg' %}"> <p>© 2020 • Built in Pittsburgh, Pa</p>
+            </div>
+        </div>
+    </footer>
+    {%endblock%}

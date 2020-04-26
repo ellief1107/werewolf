@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- own css file -->
+        {% load static %}
+		<link href="{% static 'werewolf/base.css' %}" rel="stylesheet" type="text/css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Courgette|Spicy+Rice&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700'>
+        <!-- jquery -->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <!-- own js file -->
+        <script src="{% static 'werewolf/base.js' %}" type="text/javascript"></script>
+        <title> Werewolf </title>
+    </head>
+
+    <body id="game_body">
+        <header id="game_header">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg navbar-light ">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'lobby' %}">Back To Lobby </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">{{currentUser.user.username}}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <div id="game_pagename" align="center">
+            <span id="id_name_of_page">
+                <span style="font-family: Impact;">Welcome To The Game</span>
+            </span><br>
+        </div>
+
+        <div id="game_content">
+            <div class="errors">
+                {% for error in errors %}
+                    <p class="errors">{{error}}</p>
+                {% endfor %}
+                </div>
+                <section id="player_board">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4 text-center" >
+                                    <h3 id="game_chatboard">Chat Board</h3>
+                                    <!--**************************BEGIN********************************************************-->
+                                    <div id="chat-log" disabled></div>
+                                    <div id="chat-log2" disabled style = "display:none" >ChatBoard for wolves</div>
+                                    <div >
+                                        <br>
+                                        <input type="text" id="chat-message-input" disabled style="background-color: #b3b3b3;"><br>
+                                        <input id = "chat-message-submit" disabled type="button" value="Text" class="vb btn btn-outline-light" style="background-color: #b3b3b3;">&emsp;
+                                    <!--**************************END********************************************************-->
+                                            <button id="voice_btn" class="vb btn btn-outline-light" disabled style="background-color: #b3b3b3;">
+                                                <svg class="bi bi-mic-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M5 3a3 3 0 016 0v5a3 3 0 01-6 0V3z"/>
+                                                <path fill-rule="evenodd" d="M3.5 6.5A.5.5 0 014 7v1a4 4 0 008 0V7a.5.5 0 011 0v1a5 5 0 01-4.5 4.975V15h3a.5.5 0 010 1h-7a.5.5 0 010-1h3v-2.025A5 5 0 013 8V7a.5.5 0 01.5-.5z" clip-rule="evenodd"/>
+                                                </svg> Speak
+                                            </button>&emsp;
+                                            <button id="stop_btn" class="vb btn btn-outline-light" disabled style="background-color: #b3b3b3;">
+                                                <svg class="bi bi-mic-mute-fill" width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M12.734 9.613A4.995 4.995 0 0013 8V7a.5.5 0 00-1 0v1c0 .274-.027.54-.08.799l.814.814zm-2.522 1.72A4 4 0 014 8V7a.5.5 0 00-1 0v1a5 5 0 004.5 4.975V15h-3a.5.5 0 000 1h7a.5.5 0 000-1h-3v-2.025a4.973 4.973 0 002.43-.923l-.718-.719zM11 7.88V3a3 3 0 00-5.842-.963L11 7.879zM5 6.12l4.486 4.486A3 3 0 015 8V6.121z" clip-rule="evenodd"/>
+                                                    <path stroke="#000" d="M2 1l12 12"/>
+                                                </svg> End Speaking & Send
+                                            </button>
+                                        
+                                        
+                                        <span id="counter"></span>
+                                        <input hidden type="text" id = "roomID" value = {{currentRoomID}}>
+                                        <input hidden type="text" id = "currentUsername" value = {{currentUser.user.username}}>
+                                        <input hidden type="text" id = "currentUserId" value = {{currentUser.user.id}}>
+                                        <input hidden type="text" id = "currentUserRole" value = {{currentUser.role}}>
+                                        <textarea hidden id = "game_log"> {{game_log}}</textarea>
+                                    </div>
+                                </div>
+                                <div  class="col-md-8 text-center">
+                                    <h3 id="game_players">Players</h3>
+                                    <div class="row row-cols-6">
+                                        {% for user in users %}
+                                        <div class="col">
+                                            <div class="card" id="players_card" style="width: 8rem;" >
+                                                {% load static%}
+                                                    <img src="{% static 'werewolf/moon2.jpg' %}" class="card-img-top" alt="..." >
+                                                <div class="card-body">
+                                                    <p class="card-text" id = "card_{{user.id}}_{{currentRoomID}}">{{user.user.username}}</p>
+                                                    <p class="card-text status" id = "status_{{user.id}}_{{currentRoomID}}"></p>
+                                                    <div id="area_{{user.id}}_{{currentRoomID}}"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="row">
+
+                                        <h3 id = "remind">
+                
+                                        </h3>
+                                    </div>>
+                                    <div class="row">
+                                        <h3 class="col-md-6 text-center" id = "game_command">Command
+                                        </h3>
+                                    </div>
+                                    <div class="row">
+                                        <div>
+                                            <textarea id="comment-board" disabled>{{comment_board}}</textarea>
+                                        </div>
+                                        <div>
+                                            <div class="card" id="role_card" style="width: 12rem;">
+                                            {% load static%}
+                                                <div class="card-body">
+                                                    <h5 class="card-title" id = "check_txt_{{currentRoomID}}_{{currentUser.user.id}}"></h5>
+                                                    <h3 class="card-text" id="current_role"></h3><br>
+                                                    <input class="check_button btn btn-dark" type = "button" onclick="check_card({{currentRoomID}}, {{currentUser.user.id}})" id = "check_card_{{currentRoomID}}_{{currentUser.user.id}}" value="Check Role">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </section>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+        </div>
+
+
+
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', voice_chat());
+
+            const roomName = document.getElementById("roomID").value;
+            const userId = document.getElementById("currentUserId").value;
+            console.log("currentUserId = " + userId)
+            const user = document.querySelector("#currentUsername").value;
+            //const roomName = 1;
+            console.log(roomName);
+            const chatSocket = new WebSocket(
+            'wss://'
+            + window.location.host
+            + '/ws/werewolf/start/'
+            + roomName
+            + '/'
+            );
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                console.log("*****data.gamelog" + data.game_log);
+                //*********begin****************************************************************
+                if ($("#comment-board").val().includes("speaking")) {
+                    document.getElementById('chat-log').innerHTML += '<span class="chat_msg">'+data.message+'</span>';
+                    document.getElementById('chat-log2').innerHTML += '<span class="chat_msg">'+data.message+'</span>';
+                }
+                else {
+                    document.getElementById('chat-log2').innerHTML += '<span class="chat_msg">'+data.message+'</span>';
+                }
+                //*********end******************************************************************
+                console.log(data.message)
+                console.log(data.game_log)
+            };
+
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+             };
+
+
+
+            document.querySelector('#chat-message-input').focus();
+            document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+                }
+            };
+
+            document.querySelector('#chat-message-submit').onclick = function(e) {
+                const messageInputDom = document.querySelector('#chat-message-input');
+                const user = document.querySelector("#currentUsername").value;
+                const role = document.querySelector("#currentUserRole").value;
+                const game_log = document.querySelector("#game_log").value;
+                const check_message = user + " has checked the role.";
+                console.log(game_log)
+                console.log(user)
+                console.log(role)
+                const message = user + ": "+ messageInputDom.value;
+                console.log(message);
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'role': role,
+                    'game_log': game_log,
+                }));
+                messageInputDom.value = '';
+            };
+        </script>
+        <!-- JavaScript for Bootstrap -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+
